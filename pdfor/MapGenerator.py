@@ -1,4 +1,3 @@
-import re
 import itertools
 import PySimpleGUI as sg
 from pdf2image import convert_from_path
@@ -15,6 +14,7 @@ def generate_map(InputFilePath, reSize, r, g, b):
         images[0].save(f_buf, 'png')
         input_img = np.array(Image.open(f_buf))
         output_img = image_extract(input_img, r, g, b)
+        f_buf.close()
     else:  #画像ファイル
         input_img = np.array(Image.open(str(InputFilePath)))
         output_img = image_extract(input_img, r, g, b)
