@@ -3,11 +3,11 @@ import itertools
 import PySimpleGUI as sg
 from pdf2image import convert_from_path
 import tempfile
-from PIL import Image
+from PIL import Image, ImageFilter
 import numpy as np
 
 
-def generate_map(InputFilePath, r, g, b):
+def generate_map(InputFilePath, reSize, r, g, b):
     output_img = None
     if InputFilePath.rfind('.pdf') >= 0:  #PDFファイル
         f_buf = tempfile.NamedTemporaryFile(suffix='.png')
@@ -18,8 +18,13 @@ def generate_map(InputFilePath, r, g, b):
     else:  #画像ファイル
         input_img = np.array(Image.open(str(InputFilePath)))
         output_img = image_extract(input_img, r, g, b)
-    print(output_img)
-    return Image.fromarray(output_img, 'L')
+    image_output = Image.fromarray(output_img, 'L')
+    FilI = ((((image_output.filter(ImageFilter.MinFilter())).filter(
+        ImageFilter.MinFilter())).filter(ImageFilter.MinFilter())).filter(
+            ImageFilter.MinFilter())).filter(ImageFilter.MinFilter())
+    ReI = FilI.resize((int(FilI.width * float(reSize) / 100),
+                       int(FilI.height * float(reSize) / 100)), Image.LANCZOS)
+    return ReI
 
 
 def image_extract(img, r, g, b):
@@ -36,10 +41,8 @@ def image_extract(img, r, g, b):
             else:
                 output_img[x, y] = 255  #White
                 count_c[1] += 1
-        print(count_c)
     else:
         error_window('モノクロ画像が入っています．\n対応していません．')
-    # print(output_img)
     return output_img
 
 
@@ -74,8 +77,8 @@ main_layout = [
             #file_types=(('テキストファイル'), )
         )
     ],
+    [sg.Text('抽出する色（初期値：NHKロボコン図面）')],
     [
-        sg.Text('抽出する色（初期値：NHKロボコン図面）'),
         sg.Text('R'),
         sg.InputText('218', size=(5, 1), key='color_r'),
         sg.Text('G'),
@@ -83,16 +86,21 @@ main_layout = [
         sg.Text('B'),
         sg.InputText('134', size=(5, 1), key='color_b')
     ],
-    [sg.Text('スケール'),
-     sg.InputText('1', size=(5, 1), key='size')],
     [
-        sg.Text('初期位置(m)'),
+        sg.Text('画像全体のスケール[m]'),
+        sg.Combo(('縦', '横'), size=(4, 1), default_value='縦', key='WorH'),
+        sg.InputText('1', size=(5, 1), key='size')
+    ],
+    [sg.Text('画像リサイズ[%]'),
+     sg.InputText('100', size=(5, 1), key='img_size')],
+    [sg.Text('画像左下の位置[m]')],
+    [
         sg.Text('x'),
-        sg.InputText('0', size=(5, 1), key='pos_x'),
+        sg.InputText('0.0', size=(5, 1), key='pos_x'),
         sg.Text('y'),
-        sg.InputText('0', size=(5, 1), key='pos_y'),
+        sg.InputText('0.0', size=(5, 1), key='pos_y'),
         sg.Text('θ'),
-        sg.InputText('0', size=(5, 1), key='pos_th')
+        sg.InputText('0.0', size=(5, 1), key='pos_th')
     ],
     [sg.Button('実行', key='go', expand_x=True)]
 ]
@@ -104,7 +112,7 @@ main_window = sg.Window('Map生成',
                         auto_size_text=True,
                         finalize=True)
 
-main_window.set_min_size((470, 200))
+main_window.set_min_size((470, 250))
 
 while True:
     event, values = main_window.read()
@@ -116,13 +124,36 @@ while True:
         if not values['inputFilePath']:
             error_window('ファイル(画像ファイル or PDF)が選択されていません．')
         else:
+            # PGM
             output_img = generate_map(values['inputFilePath'],
-                                      values['color_r'], values['color_g'],
-                                      values['color_b'])
-            value = sg.popup_get_file("save \'*.pgm\'",
+                                      values['img_size'], values['color_r'],
+                                      values['color_g'], values['color_b'])
+            value = sg.popup_get_file("Save Image File \'*.pgm\'.",
                                       save_as=True,
-                                      file_types=(("ROS map", ".pgm"), ))
+                                      file_types=(("ROS map Image File",
+                                                   ".pgm"), ))
             output_img.save(str(value))
+            # YAML
+            value = sg.popup_get_file("Save YAML File \'*.yaml\'.",
+                                      save_as=True,
+                                      file_types=(("ROS map YAML File",
+                                                   ".yaml"), ))
+            f = open(str(value), 'w')
+            f.write('image: ' + str(value) + '\n')
+            resolution_rate = 0
+            if values['WorH'] == '縦':
+                resolution_rate = float(values['size']) / int(
+                    output_img.height)
+            else:
+                resolution_rate = float(values['size']) / int(output_img.width)
+            f.write('resolution: ' + str(resolution_rate) + '\n')
+            f.write('origin: [' + str(values['pos_x']) + ', ' +
+                    str(values['pos_y']) + ', ' + str(values['pos_th']) +
+                    ']\n')
+            f.write('occupied_thresh: 0.65\n')
+            f.write('free_thresh: 0.196\n')
+            f.write('negate: 0\n')
+            f.close()
             break
 
 main_window.close()
