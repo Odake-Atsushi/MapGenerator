@@ -18,12 +18,13 @@ def generate_map(InputFilePath, reSize, r, g, b):
     else:  #画像ファイル
         input_img = np.array(Image.open(str(InputFilePath)))
         output_img = image_extract(input_img, r, g, b)
+
     image_output = Image.fromarray(output_img, 'L')
     FilI = ((((image_output.filter(ImageFilter.MinFilter())).filter(
         ImageFilter.MinFilter())).filter(ImageFilter.MinFilter())).filter(
             ImageFilter.MinFilter())).filter(ImageFilter.MinFilter())
     ReI = FilI.resize((int(FilI.width * float(reSize) / 100),
-                       int(FilI.height * float(reSize) / 100)))
+                       int(FilI.height * float(reSize) / 100)), Image.LANCZOS)
     return ReI
 
 
