@@ -1,5 +1,5 @@
 image: C:/Users/Atsushi/Documents/MapGenerator/map/map.yaml
-resolution: 0.008571428571428572
+resolution: 0.012244897959183673
 origin: [0.0, 0.0, 0.0]
 occupied_thresh: 0.65
 free_thresh: 0.196

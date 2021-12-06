@@ -23,7 +23,7 @@ def generate_map(InputFilePath, reSize, r, g, b):
         ImageFilter.MinFilter())).filter(ImageFilter.MinFilter())).filter(
             ImageFilter.MinFilter())).filter(ImageFilter.MinFilter())
     ReI = FilI.resize((int(FilI.width * float(reSize) / 100),
-                       int(FilI.height * float(reSize) / 100)), Image.LANCZOS)
+                       int(FilI.height * float(reSize) / 100)))
     return ReI
 
 
