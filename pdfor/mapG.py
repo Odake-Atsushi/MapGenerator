@@ -14,12 +14,12 @@ def generate_map(InputFilePath, r, g, b):
         images = convert_from_path(str(InputFilePath), 300)
         images[0].save(f_buf, 'png')
         input_img = np.array(Image.open(f_buf))
-        print(input_img)
         output_img = image_extract(input_img, r, g, b)
     else:  #画像ファイル
         input_img = np.array(Image.open(str(InputFilePath)))
         output_img = image_extract(input_img, r, g, b)
-    return Image.fromarray(output_img)
+    print(output_img)
+    return Image.fromarray(output_img, 'L')
 
 
 def image_extract(img, r, g, b):
@@ -31,14 +31,15 @@ def image_extract(img, r, g, b):
         for x, y in itertools.product(range(int(img_size[0])),
                                       range(int(img_size[1]))):
             if all(img[x, y] == RGB_c):
-                output_img[x, y] == 0  #Black
+                output_img[x, y] = 0  #Black
                 count_c[0] += 1
             else:
-                output_img[x, y] == 255  #White
+                output_img[x, y] = 255  #White
                 count_c[1] += 1
         print(count_c)
     else:
         error_window('モノクロ画像が入っています．\n対応していません．')
+    # print(output_img)
     return output_img
 
 
@@ -74,13 +75,13 @@ main_layout = [
         )
     ],
     [
-        sg.Text('抽出する色（初期値：黒）'),
+        sg.Text('抽出する色（初期値：NHKロボコン図面）'),
         sg.Text('R'),
-        sg.InputText('0', size=(5, 1), key='color_r'),
+        sg.InputText('218', size=(5, 1), key='color_r'),
         sg.Text('G'),
-        sg.InputText('0', size=(5, 1), key='color_g'),
+        sg.InputText('175', size=(5, 1), key='color_g'),
         sg.Text('B'),
-        sg.InputText('0', size=(5, 1), key='color_b')
+        sg.InputText('134', size=(5, 1), key='color_b')
     ],
     [sg.Text('スケール'),
      sg.InputText('1', size=(5, 1), key='size')],
