@@ -139,7 +139,7 @@ while True:
                                       save_as=True,
                                       file_types=(("ROS map YAML File",
                                                    ".yaml"), ))
-            f = open(str(value), 'w')
+            f = open(str(value), 'w', encoding='utf-8')
             f.write('image: ' + str(value) + '\n')
             resolution_rate = 0
             if values['WorH'] == '縦':
