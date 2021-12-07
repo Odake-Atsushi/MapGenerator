@@ -2,7 +2,7 @@ from pdf2image import convert_from_path
 import PySimpleGUI as sg
 import tempfile
 
-f = tempfile.TemporaryFile(suffix='.png')
+# f = tempfile.TemporaryFile(suffix='.png')
 # d = tempfile.TemporaryDirectory()
 
 # images = convert_from_path(
