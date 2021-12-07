@@ -12,10 +12,16 @@ if sys.platform == "win32":
     print("OK")
     base = "Win32GUI"
 
+    #D
     os.environ[
-        'TCL_LIBRARY'] = "C:\\Users\\Atsushi\\Anaconda3\\envs\\MG\\tcl\\tcl8.6"
+        'TCL_LIBRARY'] = "C:\\Users\\Atsushi\\Anaconda3\\envs\\MG\\Library\\lib\\tcl8.6"
     os.environ[
-        'TK_LIBRARY'] = "C:\\Users\\Atsushi\\Anaconda3\\envs\\MG\\tcl\\tk8.6"
+        'TK_LIBRARY'] = "C:\\Users\\Atsushi\\Anaconda3\\envs\\MG\\Library\\lib\\tk8.6"
+    # # F
+    # os.environ[
+    #     'TCL_DLL_PATH'] = "C:\\Users\\Atsushi\\Anaconda3\\envs\\MG\\Library\\bin\\tcl86t.dll"
+    # os.environ[
+    #     'TK_DLL_PATH'] = "C:\\Users\\Atsushi\\Anaconda3\\envs\\MG\\Library\\bin\\tk86t.dll"
 # else:
 #     base = None  # "Win32GUI"
 
@@ -32,9 +38,7 @@ numpy,pandas,lxmlは非常に重いので使わないなら、除く。（合計
 """
 excludes = []
 
-includefiles = [
-    "C:\\Users\\Atsushi\\Anaconda3\\envs\\MG\\Library\\bin\\poppler-glib.dll"
-]
+# includefiles = [os.environ['TCL_DLL_PATH'], os.environ['TK_DLL_PATH']]
 
 exe = Executable(script=file_path, base=base, icon=icon_path)
 
@@ -45,7 +49,7 @@ setup(name='MapGenerator',
               "packages": packages,
               "includes": includes,
               "excludes": excludes,
-              'include_files': includefiles,
+            #   'include_files': includefiles,
               "optimize": 2
           }
       },
