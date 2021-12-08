@@ -1,4 +1,4 @@
-# MapGenerator
+# RosMapGenerator
 rosのmapをつくるプログラム
 
 アナコンダが導入されていない場合，https://docs.conda.io/en/latest/miniconda.html
