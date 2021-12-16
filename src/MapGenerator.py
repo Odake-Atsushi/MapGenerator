@@ -12,11 +12,11 @@ def generate_map(InputFilePath, reSize, r, g, b):
         f_buf = tempfile.NamedTemporaryFile(suffix='.png')
         images = convert_from_path(str(InputFilePath), 300)
         images[0].save(f_buf, 'png')
-        input_img = np.array(Image.open(f_buf))
+        input_img = np.array((Image.open(f_buf)).convert('RGB'))
         output_img = image_extract(input_img, r, g, b)
         f_buf.close()
     else:  #画像ファイル
-        input_img = np.array(Image.open(str(InputFilePath)))
+        input_img = np.array((Image.open(str(InputFilePath))).convert('RGB'))
         output_img = image_extract(input_img, r, g, b)
 
     image_output = Image.fromarray(output_img, 'L')
@@ -46,7 +46,7 @@ def image_extract(img, r, g, b):
                 output_img[x, y] = 255  #White
                 count_c[1] += 1
     else:
-        error_window('モノクロ画像が入っています．\n対応していません．')
+        error_window('非対応の画像が入っています．')
     return output_img
 
 
