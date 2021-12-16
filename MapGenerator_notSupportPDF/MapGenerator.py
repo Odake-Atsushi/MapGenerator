@@ -2,6 +2,8 @@ import itertools
 import PySimpleGUI as sg
 from PIL import Image, ImageFilter
 import numpy as np
+import os
+import sys
 
 
 def generate_map(InputFilePath, reSize, r, g, b):
@@ -55,6 +57,10 @@ def error_window(msg):
             break
     sub_window.close()
 
+def resource_path(relative): #アイコン表示用にアイコンファイルのパスを取得する．
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative)
+    return path.join(path.abspath('.'), relative)
 
 sg.theme('Default')
 
@@ -99,13 +105,15 @@ main_layout = [
     [sg.Button('実行', key='go', expand_x=True)]
 ]
 
+icon_path = resource_path("ImouTadataka.ico")
+
 main_window = sg.Window('ROS Map 生成',
                         main_layout,
                         resizable=True,
                         auto_size_buttons=True,
                         auto_size_text=True,
                         finalize=True,
-                        icon="ImouTadataka.ico")
+                        icon=icon_path)
 
 main_window.set_min_size((470, 250))
 
