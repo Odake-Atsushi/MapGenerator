@@ -99,12 +99,13 @@ main_layout = [
     [sg.Button('実行', key='go', expand_x=True)]
 ]
 
-main_window = sg.Window('Map生成',
+main_window = sg.Window('ROS Map 生成',
                         main_layout,
                         resizable=True,
                         auto_size_buttons=True,
                         auto_size_text=True,
-                        finalize=True)
+                        finalize=True,
+                        icon="ImouTadataka.ico")
 
 main_window.set_min_size((470, 250))
 
