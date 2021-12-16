@@ -129,18 +129,18 @@ while True:
             output_img = generate_map(values['inputFilePath'],
                                       values['img_size'], values['color_r'],
                                       values['color_g'], values['color_b'])
-            value = sg.popup_get_file("Save Image File \'*.pgm\'.",
-                                      save_as=True,
-                                      file_types=(("ROS map Image File",
-                                                   ".pgm"), ))
-            output_img.save(str(value))
+            value_pgm = sg.popup_get_file("Save Image File \'*.pgm\'.",
+                                          save_as=True,
+                                          file_types=(("ROS map Image File",
+                                                       ".pgm"), ))
+            output_img.save(str(value_pgm))
             # YAML
-            value = sg.popup_get_file("Save YAML File \'*.yaml\'.",
-                                      save_as=True,
-                                      file_types=(("ROS map YAML File",
-                                                   ".yaml"), ))
-            f = open(str(value), 'w', encoding='utf-8')
-            f.write('image: ' + str(value) + '\n')
+            value_yaml = sg.popup_get_file("Save YAML File \'*.yaml\'.",
+                                           save_as=True,
+                                           file_types=(("ROS map YAML File",
+                                                        ".yaml"), ))
+            f = open(str(value_yaml), 'w', encoding='utf-8')
+            f.write('image: ' + str(value_pgm) + '\n')
             resolution_rate = 0
             if values['WorH'] == '縦':
                 resolution_rate = float(values['size']) / int(
