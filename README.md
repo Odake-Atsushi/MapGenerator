@@ -1,6 +1,15 @@
 # RosMapGenerator
 rosのmapをつくるプログラム
 
+## PDF非対応
+対応：Windows
+
+Releasesに実行ファイルがあるので，実行してください．
+GIMP等を用いて，PDFファイルは画像ファイルに変換してください．（PNG，JPEG等）
+
+## PDF対応
+対応：Windows，Linux，Mac
+
 アナコンダが導入されていない場合，https://docs.conda.io/en/latest/miniconda.html
 を参考にしてminicondaを入れる．
 
