@@ -23,6 +23,9 @@ def generate_map(InputFilePath, reSize, r, g, b):
     FilI = ((((image_output.filter(ImageFilter.MinFilter())).filter(
         ImageFilter.MinFilter())).filter(ImageFilter.MinFilter())).filter(
             ImageFilter.MinFilter())).filter(ImageFilter.MinFilter())
+    FilI = ((((FilI.filter(ImageFilter.MaxFilter())).filter(
+        ImageFilter.MaxFilter())).filter(ImageFilter.MaxFilter())).filter(
+            ImageFilter.MaxFilter())).filter(ImageFilter.MaxFilter())
     ReI = FilI.resize((int(FilI.width * float(reSize) / 100),
                        int(FilI.height * float(reSize) / 100)), Image.LANCZOS)
     return ReI
@@ -155,6 +158,11 @@ while True:
             f.write('free_thresh: 0.196\n')
             f.write('negate: 0\n')
             f.close()
+
+            print("-- OUTPUT -------------------")
+            print("PGM:", value_pgm)
+            print("YAML:", value_yaml)
+            print("-----------------------------")
             break
 
 main_window.close()
