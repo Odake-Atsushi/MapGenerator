@@ -57,10 +57,12 @@ def error_window(msg):
             break
     sub_window.close()
 
-def resource_path(relative): #アイコン表示用にアイコンファイルのパスを取得する．
+
+def resource_path(relative):  #アイコン表示用にアイコンファイルのパスを取得する．
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative)
     return path.join(path.abspath('.'), relative)
+
 
 sg.theme('Default')
 
@@ -105,7 +107,7 @@ main_layout = [
     [sg.Button('実行', key='go', expand_x=True)]
 ]
 
-icon_path = resource_path("ImouTadataka.ico")
+icon_path = resource_path("InouTadataka.ico")
 
 main_window = sg.Window('ROS Map 生成',
                         main_layout,
